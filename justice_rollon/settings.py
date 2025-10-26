@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,7 +25,13 @@ SECRET_KEY = 'django-insecure-(ga8a8#lk8fk9yfb463mr^-m3p+@31!e-b7vf6l1%nb@fn61%4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+
+# Automatically trust the Render-assigned hostname
+if 'RENDER_EXTERNAL_HOSTNAME' in os.environ:
+    RENDER_EXTERNAL_HOSTNAME = os.environ['RENDER_EXTERNAL_HOSTNAME']
+    if RENDER_EXTERNAL_HOSTNAME not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 AUTH_USER_MODEL = "core.User"
 
@@ -135,6 +141,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:10013",  # <-- LocalWP default HTTP port (check yours)
     "http://localhost:10013",
     "http://justicerollon.local",  # <-- your LocalWP domain
+    "https://justice-18k5.onrender.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
