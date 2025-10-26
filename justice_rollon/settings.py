@@ -51,14 +51,16 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",  # MUST be first or near-top
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware", # CORRECTED: MOVED WHITE_NOISE HERE
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # "whitenoise.middleware.WhiteNoiseMiddleware", # REMOVED: Deleted from the bottom
 ]
 
 ROOT_URLCONF = 'justice_rollon.urls'
@@ -157,3 +159,16 @@ CORS_ALLOW_HEADERS = [
     "content-type",
     "x-csrftoken",
 ]
+
+
+# ... add this new section near the end of the file ...
+
+# Static Files Storage Configuration (for WhiteNoise)
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage", # NEW: Set WhiteNoise storage backend
+    },
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    }
+}
