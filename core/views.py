@@ -40,7 +40,7 @@ def login_page(request):
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-            return redirect("dashboard")
+            return redirect("dashboard2")
         else:
             return render(request, "login.html", {"error": "Invalid username or password"})
     return render(request, "login.html")
@@ -117,6 +117,20 @@ def dashboard(request):
     evidences = Evidence.objects.filter(uploader=request.user)
     petitions = Petition.objects.filter(creator=request.user)
     return render(request, "dashboard.html", {"citizen_view": True, "evidences": evidences, "petitions": petitions})
+   
+@login_required
+def dashboard2(request):
+    if request.user.role == "admin":
+        petitions = Petition.objects.filter(status="pending")
+        return render(request, "dash.html", {"admin_view": True, "petitions": petitions})
+
+    if request.user.role == "lawyer":
+        slots = ConsultationSlot.objects.filter(lawyer=request.user)
+        return render(request, "dash.html", {"lawyer_view": True, "slots": slots})
+
+    evidences = Evidence.objects.filter(uploader=request.user)
+    petitions = Petition.objects.filter(creator=request.user)
+    return render(request, "dash.html", {"citizen_view": True, "evidences": evidences, "petitions": petitions})
 
 def justice_index(request):
     """
@@ -310,7 +324,7 @@ def petition_create(request):
             petition.evidences.set(Evidence.objects.filter(id__in=evidence_ids))
 
         messages.success(request, "✅ Petition created successfully! Awaiting admin review.")
-        return redirect("petition_list")
+        return redirect("dashboard2")
 
     # 🖋️ Render form
     evidences = Evidence.objects.filter(uploader=request.user)

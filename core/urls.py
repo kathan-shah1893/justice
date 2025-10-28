@@ -53,7 +53,7 @@ urlpatterns = [
     path("petitions/", views.petition_list, name="petition_list"),
     path("petitions/create/", views.petition_create, name="petition_create"),
     path("petitions/<int:pk>/", petition_detail, name="petition_detail"),
-
+    path("dashboard2/", views.dashboard2, name="dashboard2"),
 
     # --- REST API ---
     path("api/register/", RegisterAPI.as_view(), name="api-register"),

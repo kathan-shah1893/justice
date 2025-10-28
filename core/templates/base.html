@@ -22,7 +22,7 @@
           <span style="margin-right: 10px">
             Welcome, <strong>{{ user.username }}</strong> ({{ user.role|title }})
           </span>
-          <a class="btn outline" href="{% url 'dashboard' %}">Dashboard</a>
+          <a class="btn outline" href="{% url 'dashboard2' %}">Dashboard</a>
           <a class="btn" href="{% url 'logout' %}">Logout</a>
         {% else %}
           <a class="btn outline" href="{% url 'login' %}">Login</a>
